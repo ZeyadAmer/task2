@@ -4,8 +4,8 @@ import org.springframework.context.annotation.*;
 import task3.CourseRecommender;
 
 @Configuration
-@ImportResource("classpath:beans.xml")
-@ComponentScan(basePackages = "task2")
+@ComponentScan(basePackages = {"task2","task3"})
+
 
 
 public class AppConfig {
@@ -13,5 +13,10 @@ public class AppConfig {
     @Bean(name="advancedCourseRecommender")
     public CourseRecommender advancedCourseRecommender() {
         return new AdvancedCourseRecommender();
+    }
+
+    @Bean(name="basicCourseRecommender")
+    public CourseRecommender basicCourseRecommender() {
+        return new BasicOverride();
     }
 }
