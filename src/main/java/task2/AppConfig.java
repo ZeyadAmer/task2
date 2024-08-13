@@ -1,22 +1,16 @@
 package task2;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
+import task3.CourseRecommender;
 
 @Configuration
+@ImportResource("classpath:beans.xml")
 @ComponentScan(basePackages = "task2")
+
+
 public class AppConfig {
 
-    @Bean(name = "basicCourseRecommender")
-
-    public CourseRecommender basicCourseRecommender() {
-        return new BasicCourseRecommender();
-    }
-
-    @Bean(name = "advancedCourseRecommender")
-    @Primary
+    @Bean(name="advancedCourseRecommender")
     public CourseRecommender advancedCourseRecommender() {
         return new AdvancedCourseRecommender();
     }
