@@ -1,7 +1,7 @@
 package task3;
 
-import Controller.CoursesConnection;
 import org.springframework.context.annotation.*;
+
 
 
 @Configuration
@@ -13,8 +13,7 @@ public class AppConfig {
         return new BasicCourseRecommender();
     }
 
-    @Bean(name="CoursesConnection")
-    public CoursesConnection coursesConnection() {
-        return new CoursesConnection();
-    }
+
+
+
 }
