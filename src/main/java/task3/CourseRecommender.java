@@ -1,6 +1,7 @@
 package task3;
+import Controller.Course;
 import java.util.List;
 
 public interface CourseRecommender {
-    List<task3.Course> recommendedCourses();
+    List<Course> recommendedCourses();
 }
