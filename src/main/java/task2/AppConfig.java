@@ -24,15 +24,6 @@ public class AppConfig {
     public CourseRecommender basicCourseRecommender() {
         return new BasicOverride();
     }
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/courses");
-        dataSource.setUsername("root");
-        dataSource.setPassword("@MindGame@28");
-        return dataSource;
-    }
 
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
