@@ -1,11 +1,12 @@
 package task2;
 
+import Controller.Course;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import task3.CourseRecommender;
-import task3.Course;
+
 
 @Component("advancedCourseRecommender")
 public class AdvancedCourseRecommender implements CourseRecommender {

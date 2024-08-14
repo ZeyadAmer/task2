@@ -4,7 +4,7 @@ import org.springframework.context.annotation.*;
 import task3.CourseRecommender;
 
 @Configuration
-@ComponentScan(basePackages = {"task2","task3"})
+@ComponentScan(basePackages = {"task2","task3","Controller"})
 
 
 
