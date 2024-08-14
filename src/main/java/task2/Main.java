@@ -11,7 +11,34 @@ public class Main {
 
         CourseService courseService = context.getBean(CourseService.class);
         courseService.getRecommendedCourses().forEach(course -> System.out.println(course.getName()));
-        Course course = courseService.viewCourse(1);
-        System.out.println("Course Details: " + course);
+
+        courseService.addCourse("Mathematics", "Basic Math Course", 3);
+        System.out.println("Course added!");
+
+
+
+        courseService.viewAllCourses().forEach(course ->
+                System.out.println(course.getId() + ": " + course.getName() + " - " + course.getDescription() + " (" + course.getCredit() + " credits)")
+        );
+
+
+
+        courseService.updateCourse(2, "Mathematics", "Updated Math Course", 4);
+
+
+
+        Course updatedCourse = courseService.viewCourse(2);
+        System.out.println(updatedCourse.getId() + ": " + updatedCourse.getName() + " - " + updatedCourse.getDescription() + " (" + updatedCourse.getCredit() + " credits)");
+
+        // Test deleteCourse
+
+        courseService.deleteCourse(1);
+        System.out.println("Course deleted!");
+
+
+
+        courseService.viewAllCourses().forEach(course ->
+                System.out.println(course.getId() + ": " + course.getName() + " - " + course.getDescription() + " (" + course.getCredit() + " credits)")
+        );
     }
 }
