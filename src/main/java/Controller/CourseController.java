@@ -3,10 +3,12 @@ package Controller;
 import Mappers.CourseDTO;
 import Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import Services.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
@@ -20,7 +22,7 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("/{id}")
-    public Course getCourse(@PathVariable int id) {
+    public CourseDTO getCourse(@PathVariable int id) {
         return courseService.viewCourse(id);
     }
 
@@ -43,10 +45,14 @@ public class CourseController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        List<CourseDTO> courses = courseService.viewAllCourses();
+    public ResponseEntity<List<CourseDTO>> getCourses(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<CourseDTO>
+                courses = courseService.viewAllCourses(pageable);
         return ResponseEntity.ok(courses);
     }
+
 //    @GetMapping("recommended")
 //    public ResponseEntity<List<Course>> getRecommendedCourses() {
 //        List<Course> courses = courseService.getRecommendedCourses();

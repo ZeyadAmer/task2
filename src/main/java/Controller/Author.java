@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name="author")
 public class Author {
 
     @Id

@@ -5,6 +5,8 @@ import Mappers.CourseDTO;
 import Mappers.CourseMapper;
 import Repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,19 +35,23 @@ public class CourseService {
         }
     }
 
-    public Course viewCourse(int id) {
-        return courseRepository.findById(id).orElse(null);
+    public CourseDTO viewCourse(int id) {
+
+        Course course= courseRepository.findById(id).orElse(null);
+        CourseDTO courseDTO = courseMapper.toCourseDTO(course);
+
+        return courseDTO;
     }
 
     public void deleteCourse(int id) {
         courseRepository.deleteById(id);
     }
 
-    public List<CourseDTO> viewAllCourses() {
-        List<Course> courses = courseRepository.findAll();
-        return courses.stream()
-                .map(courseMapper::toCourseDTO)
-                .collect(Collectors.toList());
+
+    public List<CourseDTO> viewAllCourses(Pageable pageable) {
+        Page<Course> courses = courseRepository.findAll(pageable);
+        List<CourseDTO> courseDTOs = courses.stream().map(courseMapper::toCourseDTO).collect(Collectors.toList());
+        return courseDTOs;
     }
 
 //    public List<Course> getRecommendedCourses() {

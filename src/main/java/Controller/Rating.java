@@ -2,6 +2,7 @@ package Controller;
 import javax.persistence.*;
 
 @Entity
+@Table(name="rating")
 public class Rating {
 
     @Id
