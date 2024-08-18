@@ -1,9 +1,12 @@
 package Controller;
 
+import Mappers.CourseDTO;
+import Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import Services.*;
 
 
 import java.util.List;
@@ -23,13 +26,13 @@ public class CourseController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addCourse(@RequestBody Course newCourse) {
-        courseService.addCourse(newCourse.getName(), newCourse.getDescription(), newCourse.getCredit());
+        courseService.addCourse(newCourse);
         return ResponseEntity.ok("Course added successfully!");
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateCourse(@PathVariable int id, @RequestBody Course updatedCourse) {
-        courseService.updateCourse(id, updatedCourse.getName(), updatedCourse.getDescription(), updatedCourse.getCredit());
+        courseService.updateCourse(id,updatedCourse);
         return ResponseEntity.ok("Course updated successfully!");
     }
 
@@ -40,13 +43,13 @@ public class CourseController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Course>> getAllCourses() {
-        List<Course> courses = courseService.viewAllCourses();
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+        List<CourseDTO> courses = courseService.viewAllCourses();
         return ResponseEntity.ok(courses);
     }
-    @GetMapping("recommended")
-    public ResponseEntity<List<Course>> getRecommendedCourses() {
-        List<Course> courses = courseService.getRecommendedCourses();
-        return ResponseEntity.ok(courses);
-    }
+//    @GetMapping("recommended")
+//    public ResponseEntity<List<Course>> getRecommendedCourses() {
+//        List<Course> courses = courseService.getRecommendedCourses();
+//        return ResponseEntity.ok(courses);
+//    }
 }

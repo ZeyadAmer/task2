@@ -1,22 +1,25 @@
 package Controller;
+
 import javax.persistence.*;
 
+
 @Entity
-public class Rating {
+public class Assessment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer number;
+    private String content;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
-    public Rating() {}
-    public Rating(Integer number, Course course) {
-        this.number = number;
+    // Getters and setters
+    public Assessment() {}
+    public Assessment(String content, Course course) {
+        this.content = content;
         this.course = course;
     }
     public Long getId() {
@@ -25,11 +28,11 @@ public class Rating {
     public void setId(Long id) {
         this.id = id;
     }
-    public Integer getNumber() {
-        return number;
+    public String getContent() {
+        return content;
     }
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setContent(String content) {
+        this.content = content;
     }
     public Course getCourse() {
         return course;
@@ -37,4 +40,6 @@ public class Rating {
     public void setCourse(Course course) {
         this.course = course;
     }
+
+
 }
