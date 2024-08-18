@@ -1,10 +1,14 @@
 package Controller;
 
+
+
 public class Course {
     private int id;
     private String name;
     private String description;
     private int credit;
+
+
 
     // Constructor with all fields
     public Course(int id, String name, String description, int credit) {
@@ -18,6 +22,7 @@ public class Course {
     public Course(String name) {
         this.name = name;
     }
+
 
     // Getter for id
     public int getId() {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
-@Component("basicCourseRecommender")
+
 public class BasicCourseRecommender implements CourseRecommender {
     public List<Course> recommendedCourses() {
         return Arrays.asList(
