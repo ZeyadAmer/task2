@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
@@ -53,9 +52,5 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
-//    @GetMapping("recommended")
-//    public ResponseEntity<List<Course>> getRecommendedCourses() {
-//        List<Course> courses = courseService.getRecommendedCourses();
-//        return ResponseEntity.ok(courses);
-//    }
+
 }
