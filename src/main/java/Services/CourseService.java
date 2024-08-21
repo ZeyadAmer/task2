@@ -1,6 +1,8 @@
 package Services;
 
 import Controller.Course;
+import Exceptions.*;
+import Exceptions.IllegalArgumentException;
 import Mappers.CourseDTO;
 import Mappers.CourseMapper;
 import Repositories.CourseRepository;
@@ -22,40 +24,65 @@ public class CourseService {
 
 
     public void addCourse(Course course) {
+        Optional<Course> existingCourse = courseRepository.findByName(course.getName());
+        if (course.getName() == null || course.getName().isEmpty()) {
+            throw new IllegalArgumentException("Course name is required.");
+        }
+        if (course.getDescription() == null || course.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("Course description is required.");
+        }
+        if (course.getCredit() <= 0) {
+            throw new IllegalArgumentException("Course credit must be a positive number.");
+        }
+        if (existingCourse.isPresent()) {
+            throw new CourseExistsException();
+        }
+
         courseRepository.save(course);
     }
-    public void updateCourse(int id, Course updatedCourse) {
-        Optional<Course> existingCourse = courseRepository.findById(id);
+    public void updateCourse(String name, Course updatedCourse) {
+        Optional<Course> existingCourse = courseRepository.findByName(name);
+
         if (existingCourse.isPresent()) {
             Course course = existingCourse.get();
-            course.setName(updatedCourse.getName());
-            course.setDescription(updatedCourse.getDescription());
-            course.setCredit(updatedCourse.getCredit());
+            if (updatedCourse.getName() != null && !updatedCourse.getName().isEmpty()) {
+                course.setName(updatedCourse.getName());
+            }
+            if (updatedCourse.getDescription() != null && !updatedCourse.getDescription().isEmpty()) {
+                course.setDescription(updatedCourse.getDescription());
+            }
+
+            if (updatedCourse.getCredit() <= 0) {
+                throw new IllegalArgumentException("Course credit must be a positive number.");
+            }else course.setCredit(updatedCourse.getCredit());
             courseRepository.save(course);
+        } else {
+            throw new CourseNotFoundException();
         }
     }
 
-    public CourseDTO viewCourse(int id) {
-
-        Course course= courseRepository.findById(id).orElse(null);
-        CourseDTO courseDTO = courseMapper.toCourseDTO(course);
-
-        return courseDTO;
+    public CourseDTO viewCourse(String name) {
+        Course course = courseRepository.findByName(name).orElseThrow(CourseNotFoundException::new);
+        return courseMapper.toCourseDTO(course);
     }
 
-    public void deleteCourse(int id) {
-        courseRepository.deleteById(id);
+
+    public void deleteCourse(String name) {
+        Optional<Course> existingCourse = courseRepository.findByName(name);
+        if (existingCourse.isPresent()) {
+            courseRepository.delete(existingCourse.get());
+        } else {
+            throw new CourseNotFoundException();
+        }
+
     }
+
 
 
     public List<CourseDTO> viewAllCourses(Pageable pageable) {
         Page<Course> courses = courseRepository.findAll(pageable);
-        List<CourseDTO> courseDTOs = courses.stream().map(courseMapper::toCourseDTO).collect(Collectors.toList());
-        return courseDTOs;
+        return courses.stream().map(courseMapper::toCourseDTO).collect(Collectors.toList());
     }
 
-//    public List<Course> getRecommendedCourses() {
-//
-//    }
 
 }

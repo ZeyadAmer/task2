@@ -20,9 +20,9 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/{id}")
-    public CourseDTO getCourse(@PathVariable int id) {
-        return courseService.viewCourse(id);
+    @GetMapping("/viewCourse")
+    public CourseDTO getCourse(@RequestParam String name) {
+        return courseService.viewCourse(name);
     }
 
     @PostMapping("/add")
@@ -31,15 +31,15 @@ public class CourseController {
         return ResponseEntity.ok("Course added successfully!");
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateCourse(@PathVariable int id, @RequestBody Course updatedCourse) {
-        courseService.updateCourse(id,updatedCourse);
+    @PutMapping("/update")
+    public ResponseEntity<String> updateCourse(@RequestParam String name, @RequestBody Course updatedCourse) {
+        courseService.updateCourse(name,updatedCourse);
         return ResponseEntity.ok("Course updated successfully!");
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteCourse(@PathVariable int id) {
-        courseService.deleteCourse(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteCourse(@RequestParam String name) {
+        courseService.deleteCourse(name);
         return ResponseEntity.ok("Course deleted successfully!");
     }
 

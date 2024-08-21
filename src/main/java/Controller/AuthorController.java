@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/authors")
@@ -14,11 +14,6 @@ import java.util.Optional;
 public class AuthorController {
     @Autowired
     private AuthorService authorService;
-
-    @PostMapping("/add")
-    public void addAuthor(@RequestBody Author author) {
-        authorService.addAuthor(author);
-    }
 
     @GetMapping("/email")
     public Author findByEmail(@RequestParam String email) {
