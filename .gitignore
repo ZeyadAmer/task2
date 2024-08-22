@@ -36,3 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/src/sonarqubeCommand.txt
+/src/main/java/task3/DataSourceConfig.java

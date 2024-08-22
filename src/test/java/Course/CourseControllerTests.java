@@ -51,7 +51,7 @@ public class CourseControllerTests {
     public void testViewCourse_NotFound() throws Exception {
         when(courseService.viewCourse("Non-existent Course")).thenThrow(new CourseNotFoundException());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/courses/viewCourse")
+        mockMvc.perform(get("/courses/viewCourse")
                         .param("name", "Non-existent Course"))
                 .andExpect(status().isNotFound());
     }
