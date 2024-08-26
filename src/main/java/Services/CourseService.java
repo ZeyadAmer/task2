@@ -63,9 +63,8 @@ public class CourseService {
 
     public CourseDTO viewCourse(String name) {
         Course course = courseRepository.findByName(name).orElseThrow(CourseNotFoundException::new);
-        return courseMapper.toCourseDTO(course);
+        return courseMapper.courseToCourseDTO(course);
     }
-
 
     public void deleteCourse(String name) {
         Optional<Course> existingCourse = courseRepository.findByName(name);
@@ -77,11 +76,9 @@ public class CourseService {
 
     }
 
-
-
     public List<CourseDTO> viewAllCourses(Pageable pageable) {
         Page<Course> courses = courseRepository.findAll(pageable);
-        return courses.stream().map(courseMapper::toCourseDTO).collect(Collectors.toList());
+        return courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toList());
     }
 
 

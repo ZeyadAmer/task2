@@ -9,15 +9,17 @@ import Repositories.CourseRepository;
 import Services.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -130,13 +132,13 @@ public class CourseServiceTests {
     @Test
     public void testViewCourse_Success() {
         Course course = new Course("Test Course", "Description", 5);
-        CourseDTO courseDTO = new CourseDTO();
+        CourseDTO courseDTO = new CourseDTO("Test Course", "Description");
 
         Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
-        Mockito.when(courseMapper.toCourseDTO(course)).thenReturn(courseDTO);
+        Mockito.when(courseMapper.courseToCourseDTO(course)).thenReturn(courseDTO);
 
         CourseDTO result = courseService.viewCourse("Test Course");
-        assertNotNull(result);
+        assertEquals(result.getName(),course.getName());
         Mockito.verify(courseRepository, Mockito.times(1)).findByName("Test Course");
     }
 
@@ -149,10 +151,13 @@ public class CourseServiceTests {
 
     @Test
     public void testDeleteCourse_Success() {
+        Course course = new Course("Test Course", "Description", 5);
 
-        Mockito.when(courseRepository.findByName("Non-existent Course")).thenReturn(Optional.empty());
+        Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
 
-        assertThrows(CourseNotFoundException.class, () -> courseService.deleteCourse("Non-existent Course"));
+        assertDoesNotThrow(() -> courseService.deleteCourse("Test Course"));
+        Mockito.verify(courseRepository, Mockito.times(1)).delete(course);
+
 
     }
 
@@ -160,12 +165,10 @@ public class CourseServiceTests {
 
     @Test
     public void testDeleteCourse_NotFound() {
-        Course course = new Course("Test Course", "Description", 5);
+        Mockito.when(courseRepository.findByName("Non-existent Course")).thenReturn(Optional.empty());
 
-        Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
+        assertThrows(CourseNotFoundException.class, () -> courseService.deleteCourse("Non-existent Course"));
 
-        assertDoesNotThrow(() -> courseService.deleteCourse("Test Course"));
-        Mockito.verify(courseRepository, Mockito.times(1)).delete(course);
     }
 
     @Test
@@ -176,10 +179,18 @@ public class CourseServiceTests {
 
         PageRequest pageable = PageRequest.of(0, 10);
         Mockito.when(courseRepository.findAll(pageable)).thenReturn(coursesPage);
-        Mockito.when(courseMapper.toCourseDTO(course1)).thenReturn(new CourseDTO());
-        Mockito.when(courseMapper.toCourseDTO(course2)).thenReturn(new CourseDTO());
 
-        assertDoesNotThrow(() -> courseService.viewAllCourses(pageable));
+        CourseDTO courseDTO1 = new CourseDTO("Course 1", "Description 1");
+        CourseDTO courseDTO2 = new CourseDTO("Course 2", "Description 2");
+
+        Mockito.when(courseMapper.courseToCourseDTO(course1)).thenReturn(courseDTO1);
+        Mockito.when(courseMapper.courseToCourseDTO(course2)).thenReturn(courseDTO2);
+
+        List<CourseDTO> result = courseService.viewAllCourses(pageable);
+        assertEquals(course1.getName(), result.get(0).getName());
+        assertEquals(course2.getName(), result.get(1).getName());
+
+
         Mockito.verify(courseRepository, Mockito.times(1)).findAll(pageable);
     }
 }

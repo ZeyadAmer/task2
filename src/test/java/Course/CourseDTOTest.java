@@ -7,11 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import Controller.Course;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -39,8 +36,8 @@ public class CourseDTOTest {
     @Test
     public void testCourseDTO_NullCourse() {
         Course course = null;
-        when(courseMapper.toCourseDTO(course)).thenReturn(null);
-        courseDTO = courseMapper.toCourseDTO(course);
+        when(courseMapper.courseToCourseDTO(course)).thenReturn(null);
+        courseDTO = courseMapper.courseToCourseDTO(course);
         assertNull(courseDTO,"CourseDTO should be null");
     }
     @Test
@@ -50,9 +47,9 @@ public class CourseDTOTest {
         mockedCourseDTO.setName("Test");
         mockedCourseDTO.setDescription("Description");
 
-        when(courseMapper.toCourseDTO(course)).thenReturn(mockedCourseDTO);
+        when(courseMapper.courseToCourseDTO(course)).thenReturn(mockedCourseDTO);
 
-        courseDTO = courseMapper.toCourseDTO(course);
+        courseDTO = courseMapper.courseToCourseDTO(course);
         assertEquals("Test",courseDTO.getName(),"name should be 'Test'");
         assertEquals("Description",courseDTO.getDescription(),"Description should be 'Description'");
     }
