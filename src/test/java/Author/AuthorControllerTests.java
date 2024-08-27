@@ -1,10 +1,10 @@
 package Author;
 
 import Controller.Author;
-import Controller.AuthorController;
-import Services.AuthorService;
-import Exceptions.AuthorNotFoundException;
-import Exceptions.InvalidEmailFormatException;
+import task3.Controller.AuthorController;
+import task3.Exceptions.AuthorNotFoundException;
+import task3.Services.AuthorService;
+import task3.Exceptions.InvalidEmailFormatException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,14 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AuthorController.class)
 @ContextConfiguration(classes = AuthorController.class)
-@ComponentScan(basePackages = "Exceptions")
+@ComponentScan(basePackages = "task3/Exceptions")
 public class AuthorControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+
     @MockBean
     private AuthorService authorService;
-
 
     @Test
     public void testFindByEmail_AuthorExists() throws Exception {
@@ -46,7 +46,8 @@ public class AuthorControllerTests {
 
     @Test
     public void testFindByEmail_AuthorNotFound() throws Exception {
-        when(authorService.getAuthorByEmail(anyString())).thenThrow(AuthorNotFoundException.class);
+
+        when(authorService.getAuthorByEmail("notfound@example.com")).thenThrow(new AuthorNotFoundException());
 
         mockMvc.perform(get("/authors/email")
                         .param("email", "notfound@example.com")

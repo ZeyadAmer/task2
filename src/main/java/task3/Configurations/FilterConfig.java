@@ -1,4 +1,4 @@
-package task3;
+package task3.Configurations;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

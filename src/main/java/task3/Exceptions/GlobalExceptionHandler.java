@@ -1,4 +1,4 @@
-package Exceptions;
+package task3.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

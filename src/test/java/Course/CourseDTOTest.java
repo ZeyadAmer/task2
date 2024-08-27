@@ -1,7 +1,7 @@
 package Course;
 
-import Mappers.CourseDTO;
-import Mappers.CourseMapper;
+import task3.Mappers.CourseDTO;
+import task3.Mappers.CourseMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 
-@SpringBootTest(classes = task3.Main.class)
+@SpringBootTest(classes = task3.UdemyClone.class)
 public class CourseDTOTest {
     @Mock
     private CourseMapper courseMapper;

@@ -1,7 +1,7 @@
-package Controller;
+package task3.Controller;
 
-import Mappers.CourseDTO;
-import Services.CourseService;
+import task3.Mappers.CourseDTO;
+import task3.Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +26,13 @@ public class CourseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCourse(@RequestBody Course newCourse) {
+    public ResponseEntity<String> addCourse(@RequestBody CourseDTO newCourse) {
         courseService.addCourse(newCourse);
         return ResponseEntity.ok("Course added successfully!");
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateCourse(@RequestParam String name, @RequestBody Course updatedCourse) {
+    public ResponseEntity<String> updateCourse(@RequestParam String name, @RequestBody CourseDTO updatedCourse) {
         courseService.updateCourse(name,updatedCourse);
         return ResponseEntity.ok("Course updated successfully!");
     }
@@ -52,5 +52,9 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
+    @GetMapping("/leastCredit")
+    public CourseDTO getLeastCredit() {
+        return courseService.getCourseWithLowestCredit();
+    }
 
 }

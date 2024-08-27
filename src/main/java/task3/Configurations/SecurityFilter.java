@@ -1,4 +1,4 @@
-package task3;
+package task3.Configurations;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpFilter;
@@ -15,8 +15,6 @@ public class SecurityFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = getAdminToken(request);
-
-
 
         if (token == null) {
             System.out.println("No Authorization token found.");

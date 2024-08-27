@@ -1,4 +1,4 @@
-package task3;
+package task3.Configurations;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -30,7 +30,7 @@ public class SwaggerConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("public-api")
-                .packagesToScan("Controller")  // Change this to your actual package
+                .packagesToScan("task3")  // Change this to your actual package
                 .pathsToMatch("/**")  // Match all paths inside the Controller package
                 .build();
     }

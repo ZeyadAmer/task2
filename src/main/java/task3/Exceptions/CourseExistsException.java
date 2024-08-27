@@ -1,4 +1,4 @@
-package Exceptions;
+package task3.Exceptions;
 
 public class CourseExistsException extends RuntimeException{
     public CourseExistsException(){

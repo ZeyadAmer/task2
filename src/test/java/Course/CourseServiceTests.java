@@ -1,16 +1,16 @@
 package Course;
 
 import Controller.Course;
-import Exceptions.*;
-import Exceptions.IllegalArgumentException;
-import Mappers.CourseDTO;
-import Mappers.CourseMapper;
-import Repositories.CourseRepository;
-import Services.CourseService;
+import task3.Exceptions.CourseExistsException;
+import task3.Exceptions.CourseNotFoundException;
+import task3.Exceptions.IllegalArgumentException;
+import task3.Mappers.CourseDTO;
+import task3.Mappers.CourseMapper;
+import task3.Repositories.CourseRepository;
+import task3.Services.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,7 +24,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest(classes = task3.Main.class)
+@SpringBootTest(classes = task3.UdemyClone.class)
 public class CourseServiceTests {
 
     @Mock
@@ -43,60 +43,75 @@ public class CourseServiceTests {
 
     @Test
     public void testAddCourse_Success() {
+        CourseDTO courseDTO = new CourseDTO("Test Course", "Description", 5);
         Course course = new Course("Test Course", "Description", 5);
-
         Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.empty());
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
 
-        assertDoesNotThrow(() -> courseService.addCourse(course));
-        Mockito.verify(courseRepository, Mockito.times(1)).save(course);
+        assertDoesNotThrow(() -> courseService.addCourse(courseDTO));
+        Course save = courseMapper.courseDTOToCourse(courseDTO);
+        Mockito.verify(courseRepository, Mockito.times(1)).save(save);
     }
 
     @Test
     public void testAddCourse_CourseExists() {
         Course course = new Course("Test Course", "Description", 5);
-
+        CourseDTO  courseDTO = new CourseDTO("Test Course", "Description", 5);
         Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
 
-        Exception exception = assertThrows(CourseExistsException.class, () -> courseService.addCourse(course));
+        Exception exception = assertThrows(CourseExistsException.class, () -> courseService.addCourse(courseDTO));
         assertEquals("Course with the same name already exists.", exception.getMessage());
     }
 
     @Test
     public void testAddCourse_MissingName() {
+        CourseDTO courseDTO = new CourseDTO("", "Description", 5);
         Course course = new Course("", "Description", 5);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
+        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
         assertEquals("Course name is required.", exception.getMessage());
     }
     @Test
     public void testAddCourse_NullName() {
+        CourseDTO courseDTO = new CourseDTO(null, "Description", 5);
         Course course = new Course(null, "Description", 5);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
+        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
         assertEquals("Course name is required.", exception.getMessage());
     }
 
     @Test
     public void testAddCourse_MissingCredit() {
+        CourseDTO courseDTO = new CourseDTO("Test Course", "Description", 0);
         Course course = new Course("Test Course", "Description", 0);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
+        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
         assertEquals("Course credit must be a positive number.", exception.getMessage());
 
     }
 
     @Test
     public void testAddCourse_MissingDescription() {
+        CourseDTO courseDTO = new CourseDTO("Test Course", "", 5);
         Course course = new Course("Test Course", "", 5);
+        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
         assertEquals("Course description is required.", exception.getMessage());
     }
     @Test
     public void testAddCourse_NullDescription() {
+        CourseDTO courseDTO = new CourseDTO("Test Course", null, 5);
         Course course = new Course("Test Course", null, 5);
+        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
         assertEquals("Course description is required.", exception.getMessage());
     }
 
@@ -104,16 +119,16 @@ public class CourseServiceTests {
     public void testUpdateCourse_Success() {
         Course course = new Course("Test Course", "Description", 5);
         Course updatedCourse = new Course("Updated Course", "Updated Description", 6);
-
+        CourseDTO courseDTO = new CourseDTO("Updated Course", "Updated Description", 6);
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(updatedCourse);
         Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
-
-        assertDoesNotThrow(() -> courseService.updateCourse("Test Course", updatedCourse));
+        assertDoesNotThrow(() -> courseService.updateCourse("Test Course", courseDTO));
         Mockito.verify(courseRepository, Mockito.times(1)).save(course);
     }
 
     @Test
     public void testUpdateCourse_CourseNotFound() {
-        Course updatedCourse = new Course("Updated Course", "Updated Description", 6);
+        CourseDTO updatedCourse = new CourseDTO("Updated Course", "Updated Description", 6);
 
         Mockito.when(courseRepository.findByName("Non-existent Course")).thenReturn(Optional.empty());
 
@@ -123,16 +138,17 @@ public class CourseServiceTests {
     public void testUpdateCourse_InvalidCredit() {
         Course course = new Course("Test Course", "Description", 5);
         Course updatedCourse = new Course("Updated Course", "Updated Description", 0);
-
+        CourseDTO courseDTO = new CourseDTO("Updated Course", "Updated Description", 0);
+        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(updatedCourse);
         Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse("Test Course", updatedCourse));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse("Test Course", courseDTO));
         assertEquals("Course credit must be a positive number.", exception.getMessage());
     }
 
     @Test
     public void testViewCourse_Success() {
         Course course = new Course("Test Course", "Description", 5);
-        CourseDTO courseDTO = new CourseDTO("Test Course", "Description");
+        CourseDTO courseDTO = new CourseDTO("Test Course", "Description",5);
 
         Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
         Mockito.when(courseMapper.courseToCourseDTO(course)).thenReturn(courseDTO);
@@ -180,8 +196,8 @@ public class CourseServiceTests {
         PageRequest pageable = PageRequest.of(0, 10);
         Mockito.when(courseRepository.findAll(pageable)).thenReturn(coursesPage);
 
-        CourseDTO courseDTO1 = new CourseDTO("Course 1", "Description 1");
-        CourseDTO courseDTO2 = new CourseDTO("Course 2", "Description 2");
+        CourseDTO courseDTO1 = new CourseDTO("Course 1", "Description 1",5);
+        CourseDTO courseDTO2 = new CourseDTO("Course 2", "Description 2",3);
 
         Mockito.when(courseMapper.courseToCourseDTO(course1)).thenReturn(courseDTO1);
         Mockito.when(courseMapper.courseToCourseDTO(course2)).thenReturn(courseDTO2);

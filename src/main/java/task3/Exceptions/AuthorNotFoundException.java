@@ -1,4 +1,4 @@
-package Exceptions;
+package task3.Exceptions;
 
 public class AuthorNotFoundException extends RuntimeException{
     public AuthorNotFoundException(){

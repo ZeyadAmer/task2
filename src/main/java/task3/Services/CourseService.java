@@ -1,11 +1,12 @@
-package Services;
+package task3.Services;
 
 import Controller.Course;
-import Exceptions.*;
-import Exceptions.IllegalArgumentException;
-import Mappers.CourseDTO;
-import Mappers.CourseMapper;
-import Repositories.CourseRepository;
+import task3.Exceptions.CourseExistsException;
+import task3.Exceptions.CourseNotFoundException;
+import task3.Exceptions.IllegalArgumentException;
+import task3.Mappers.CourseDTO;
+import task3.Mappers.CourseMapper;
+import task3.Repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +22,17 @@ public class CourseService {
     private CourseRepository courseRepository;
     @Autowired
     private CourseMapper courseMapper;
+    private Course discover;
+
+    @Autowired
+    public CourseService(Course discover) {
+        this.discover = discover;
+    }
 
 
-    public void addCourse(Course course) {
+
+    public void addCourse(CourseDTO courseDTO) {
+        Course course = courseMapper.courseDTOToCourse(courseDTO);
         Optional<Course> existingCourse = courseRepository.findByName(course.getName());
         if (course.getName() == null || course.getName().isEmpty()) {
             throw new IllegalArgumentException("Course name is required.");
@@ -40,9 +49,9 @@ public class CourseService {
 
         courseRepository.save(course);
     }
-    public void updateCourse(String name, Course updatedCourse) {
+    public void updateCourse(String name, CourseDTO updatedCourseDTO) {
         Optional<Course> existingCourse = courseRepository.findByName(name);
-
+        Course updatedCourse = courseMapper.courseDTOToCourse(updatedCourseDTO);
         if (existingCourse.isPresent()) {
             Course course = existingCourse.get();
             if (updatedCourse.getName() != null && !updatedCourse.getName().isEmpty()) {
@@ -79,6 +88,10 @@ public class CourseService {
     public List<CourseDTO> viewAllCourses(Pageable pageable) {
         Page<Course> courses = courseRepository.findAll(pageable);
         return courses.stream().map(courseMapper::courseToCourseDTO).collect(Collectors.toList());
+    }
+
+    public CourseDTO getCourseWithLowestCredit() {
+        return courseMapper.courseToCourseDTO(discover);
     }
 
 

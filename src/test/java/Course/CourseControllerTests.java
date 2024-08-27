@@ -1,11 +1,12 @@
 package Course;
 
 import Controller.Course;
-import Controller.CourseController;
-import Exceptions.*;
-import Exceptions.IllegalArgumentException;
-import Mappers.CourseDTO;
-import Services.CourseService;
+import task3.Exceptions.CourseExistsException;
+import task3.Exceptions.CourseNotFoundException;
+import task3.Controller.CourseController;
+import task3.Exceptions.IllegalArgumentException;
+import task3.Mappers.CourseDTO;
+import task3.Services.CourseService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CourseController.class)
 @ContextConfiguration(classes = CourseController.class)
-@ComponentScan(basePackages = "Exceptions")
+@ComponentScan(basePackages = "task3/Exceptions")
 public class CourseControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -68,9 +69,9 @@ public class CourseControllerTests {
 
     @Test
     public void testAddCourse_CourseExists() throws Exception {
-        Course course = new Course("Test Course", "Description", 5);
+        CourseDTO course = new CourseDTO("Test Course", "Description", 5);
         Mockito.doThrow(new CourseExistsException())
-                .when(courseService).addCourse(any(Course.class));
+                .when(courseService).addCourse(any(CourseDTO.class));
 
         mockMvc.perform(post("/courses/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -80,9 +81,9 @@ public class CourseControllerTests {
     }
     @Test
     public void testAddCourse_MissingName() throws Exception {
-        Course course = new Course(null, "Description", 5);
+        CourseDTO course = new CourseDTO(null, "Description", 5);
         Mockito.doThrow(new IllegalArgumentException("Course name is required."))
-                .when(courseService).addCourse(any(Course.class));
+                .when(courseService).addCourse(any(CourseDTO.class));
 
         mockMvc.perform(post("/courses/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +105,7 @@ public class CourseControllerTests {
     @Test
     public void testUpdateCourse_NotFound() throws Exception {
         Mockito.doThrow(new CourseNotFoundException())
-                .when(courseService).updateCourse(any(String.class), any(Course.class));
+                .when(courseService).updateCourse(any(String.class), any(CourseDTO.class));
 
         mockMvc.perform(put("/courses/update")
                         .param("name", "Non-existent Course")
@@ -145,5 +146,14 @@ public class CourseControllerTests {
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
+    }
+    @Test
+    public void testGetLeastCredit_Success() throws Exception {
+        CourseDTO courseDTO = new CourseDTO();
+        when(courseService.getCourseWithLowestCredit()).thenReturn(courseDTO);
+
+        mockMvc.perform(get("/courses/leastCredit")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

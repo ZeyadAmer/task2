@@ -1,20 +1,22 @@
 package Author;
 
 import Controller.Author;
-import Exceptions.*;
-import Repositories.AuthorRepository;
-import Services.AuthorService;
+import task3.Repositories.AuthorRepository;
+import task3.Services.AuthorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import task3.Exceptions.AuthorNotFoundException;
+import task3.Exceptions.InvalidEmailFormatException;
+
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = task3.Main.class)
+@SpringBootTest(classes = task3.UdemyClone.class)
 public class AuthorServiceTests {
 
     @Mock

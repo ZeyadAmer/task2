@@ -1,8 +1,6 @@
-package task3;
+package task3.Configurations;
 
 import org.springframework.context.annotation.*;
-import org.springframework.jdbc.core.JdbcTemplate;
-import javax.sql.DataSource;
 
 
 @Configuration
