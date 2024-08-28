@@ -1,10 +1,10 @@
 package Course;
 
 import Controller.Course;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import task3.Exceptions.CourseExistsException;
 import task3.Exceptions.CourseNotFoundException;
 import task3.Controller.CourseController;
-import task3.Exceptions.IllegalArgumentException;
 import task3.Mappers.CourseDTO;
 import task3.Services.CourseService;
 import org.mockito.Mockito;
@@ -30,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CourseControllerTests {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     @MockBean
     private CourseService courseService;
@@ -81,15 +84,13 @@ public class CourseControllerTests {
     }
     @Test
     public void testAddCourse_MissingName() throws Exception {
-        CourseDTO course = new CourseDTO(null, "Description", 5);
-        Mockito.doThrow(new IllegalArgumentException("Course name is required."))
-                .when(courseService).addCourse(any(CourseDTO.class));
+        CourseDTO courseDTO = new CourseDTO("", "Valid description", 5);
 
         mockMvc.perform(post("/courses/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Test Course\", \"description\":\"Description\", \"credit\":5}"))
+                        .content(objectMapper.writeValueAsString(courseDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Course name is required."));
+                .andExpect(jsonPath("$.name").value("Name is mandatory"));
     }
 
     @Test

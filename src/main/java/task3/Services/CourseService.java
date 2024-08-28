@@ -3,7 +3,6 @@ package task3.Services;
 import Controller.Course;
 import task3.Exceptions.CourseExistsException;
 import task3.Exceptions.CourseNotFoundException;
-import task3.Exceptions.IllegalArgumentException;
 import task3.Mappers.CourseDTO;
 import task3.Mappers.CourseMapper;
 import task3.Repositories.CourseRepository;
@@ -34,15 +33,6 @@ public class CourseService {
     public void addCourse(CourseDTO courseDTO) {
         Course course = courseMapper.courseDTOToCourse(courseDTO);
         Optional<Course> existingCourse = courseRepository.findByName(course.getName());
-        if (course.getName() == null || course.getName().isEmpty()) {
-            throw new IllegalArgumentException("Course name is required.");
-        }
-        if (course.getDescription() == null || course.getDescription().isEmpty()) {
-            throw new IllegalArgumentException("Course description is required.");
-        }
-        if (course.getCredit() <= 0) {
-            throw new IllegalArgumentException("Course credit must be a positive number.");
-        }
         if (existingCourse.isPresent()) {
             throw new CourseExistsException();
         }
@@ -54,16 +44,9 @@ public class CourseService {
         Course updatedCourse = courseMapper.courseDTOToCourse(updatedCourseDTO);
         if (existingCourse.isPresent()) {
             Course course = existingCourse.get();
-            if (updatedCourse.getName() != null && !updatedCourse.getName().isEmpty()) {
-                course.setName(updatedCourse.getName());
-            }
-            if (updatedCourse.getDescription() != null && !updatedCourse.getDescription().isEmpty()) {
-                course.setDescription(updatedCourse.getDescription());
-            }
-
-            if (updatedCourse.getCredit() <= 0) {
-                throw new IllegalArgumentException("Course credit must be a positive number.");
-            }else course.setCredit(updatedCourse.getCredit());
+            course.setName(updatedCourse.getName());
+            course.setDescription(updatedCourse.getDescription());
+            course.setCredit(updatedCourse.getCredit());
             courseRepository.save(course);
         } else {
             throw new CourseNotFoundException();

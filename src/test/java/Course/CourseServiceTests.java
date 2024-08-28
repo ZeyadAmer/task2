@@ -3,7 +3,6 @@ package Course;
 import Controller.Course;
 import task3.Exceptions.CourseExistsException;
 import task3.Exceptions.CourseNotFoundException;
-import task3.Exceptions.IllegalArgumentException;
 import task3.Mappers.CourseDTO;
 import task3.Mappers.CourseMapper;
 import task3.Repositories.CourseRepository;
@@ -64,56 +63,7 @@ public class CourseServiceTests {
         assertEquals("Course with the same name already exists.", exception.getMessage());
     }
 
-    @Test
-    public void testAddCourse_MissingName() {
-        CourseDTO courseDTO = new CourseDTO("", "Description", 5);
-        Course course = new Course("", "Description", 5);
-        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
-        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
-        assertEquals("Course name is required.", exception.getMessage());
-    }
-    @Test
-    public void testAddCourse_NullName() {
-        CourseDTO courseDTO = new CourseDTO(null, "Description", 5);
-        Course course = new Course(null, "Description", 5);
-        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
-        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
-        assertEquals("Course name is required.", exception.getMessage());
-    }
 
-    @Test
-    public void testAddCourse_MissingCredit() {
-        CourseDTO courseDTO = new CourseDTO("Test Course", "Description", 0);
-        Course course = new Course("Test Course", "Description", 0);
-        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
-        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
-        assertEquals("Course credit must be a positive number.", exception.getMessage());
-
-    }
-
-    @Test
-    public void testAddCourse_MissingDescription() {
-        CourseDTO courseDTO = new CourseDTO("Test Course", "", 5);
-        Course course = new Course("Test Course", "", 5);
-        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
-        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
-
-        assertEquals("Course description is required.", exception.getMessage());
-    }
-    @Test
-    public void testAddCourse_NullDescription() {
-        CourseDTO courseDTO = new CourseDTO("Test Course", null, 5);
-        Course course = new Course("Test Course", null, 5);
-        Mockito.when(courseRepository.findByName(course.getName())).thenReturn(Optional.of(course));
-        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(course);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(courseDTO));
-
-        assertEquals("Course description is required.", exception.getMessage());
-    }
 
     @Test
     public void testUpdateCourse_Success() {
@@ -134,16 +84,7 @@ public class CourseServiceTests {
 
         assertThrows(CourseNotFoundException.class, () -> courseService.updateCourse("Non-existent Course", updatedCourse));
     }
-    @Test
-    public void testUpdateCourse_InvalidCredit() {
-        Course course = new Course("Test Course", "Description", 5);
-        Course updatedCourse = new Course("Updated Course", "Updated Description", 0);
-        CourseDTO courseDTO = new CourseDTO("Updated Course", "Updated Description", 0);
-        Mockito.when(courseMapper.courseDTOToCourse(courseDTO)).thenReturn(updatedCourse);
-        Mockito.when(courseRepository.findByName("Test Course")).thenReturn(Optional.of(course));
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse("Test Course", courseDTO));
-        assertEquals("Course credit must be a positive number.", exception.getMessage());
-    }
+
 
     @Test
     public void testViewCourse_Success() {

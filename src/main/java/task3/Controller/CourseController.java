@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,13 +27,13 @@ public class CourseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCourse(@RequestBody CourseDTO newCourse) {
+    public ResponseEntity<String> addCourse(@Valid @RequestBody CourseDTO newCourse) {
         courseService.addCourse(newCourse);
         return ResponseEntity.ok("Course added successfully!");
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateCourse(@RequestParam String name, @RequestBody CourseDTO updatedCourse) {
+    public ResponseEntity<String> updateCourse(@RequestParam String name,@Valid @RequestBody CourseDTO updatedCourse) {
         courseService.updateCourse(name,updatedCourse);
         return ResponseEntity.ok("Course updated successfully!");
     }
