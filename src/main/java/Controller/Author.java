@@ -26,7 +26,6 @@ public class Author {
     )
     private List<Course> courses;
 
-    // Getters and setters
     public Author() {}
     public Author(String name, String email, LocalDate birthdate) {
         this.name = name;

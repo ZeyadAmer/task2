@@ -17,7 +17,6 @@ public class Assessment {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    // Getters and setters
     public Assessment() {}
     public Assessment(String content, Course course) {
         this.content = content;
