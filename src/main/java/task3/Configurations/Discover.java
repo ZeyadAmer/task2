@@ -9,13 +9,16 @@ import Controller.*;
 public class Discover {
     private final CourseRepository courseRepository;
 
+
     public Discover(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
+
     }
 
     @Bean(name = "courseWithLowestCredit")
     public Course discover() {
         return courseRepository.findFirstByOrderByCreditAsc()
-                .orElseThrow(() -> new RuntimeException("No course found with the lowest credit"));
+                .orElseThrow(()->new RuntimeException("there are no courses"));
     }
+
 }

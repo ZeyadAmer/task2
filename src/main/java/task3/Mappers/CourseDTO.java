@@ -2,7 +2,7 @@ package task3.Mappers;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 
 public class CourseDTO {
 

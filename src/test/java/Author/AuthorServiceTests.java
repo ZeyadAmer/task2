@@ -1,6 +1,8 @@
 package Author;
 
 import Controller.Author;
+import org.springframework.test.context.ContextConfiguration;
+import task3.Controller.CourseController;
 import task3.Repositories.AuthorRepository;
 import task3.Services.AuthorService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = task3.UdemyClone.class)
+
 public class AuthorServiceTests {
 
     @Mock
