@@ -1,7 +1,6 @@
 package Services;
 
 import Controller.Author;
-import Controller.Course;
 import Mappers.AuthorMapper;
 import Repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
