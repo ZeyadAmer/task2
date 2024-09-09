@@ -1,27 +1,10 @@
 package task3;
-
-import org.springframework.context.annotation.*;
-import org.springframework.jdbc.core.JdbcTemplate;
-import javax.sql.DataSource;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@ComponentScan(basePackages = {"task3","Controller"})
+@ComponentScan(basePackages = {"task3","task2","Controller"})
 public class AppConfig {
-    @Bean(name="basicCourseRecommender")
-    public CourseRecommender basicCourseRecommender() {
-        return new BasicCourseRecommender();
-    }
-
-    @Bean(name="dbCourseRecommender")
-    public CourseRecommender dbCourseRecommender() {
-        return new dbCourseRecommender();
-    }
-
-
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
 
 }

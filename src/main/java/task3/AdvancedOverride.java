@@ -1,18 +1,21 @@
 package task3;
+
 import Controller.Course;
 import org.springframework.stereotype.Component;
-import task2.CourseRecommender;
+import task2.AdvancedCourseRecommender;
+
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component("basicCourseRecommender")
-public class BasicCourseRecommender implements CourseRecommender {
+@Component("advancedOverride")
+public class AdvancedOverride extends AdvancedCourseRecommender {
     @Override
     public List<Course> recommendedCourses() {
         return Arrays.asList(
-                new Course("Introduction to Programming"),
-                new Course("Basic Data Structures")
+                new Course("Advanced "),
+                new Course("Overwritten")
         );
     }
 }
+
